@@ -58,8 +58,8 @@ const domRender = {
 
 let engine = JECS.createEngine(10, [Position, Graphics, Velocity]);
 
-JECS.addSystemToEngine(engine, renderSystem(domRender));
 JECS.addSystemToEngine(engine, physicsSystem());
+JECS.addSystemToEngine(engine, renderSystem(domRender));
 
 const player = JECS.createEntity(engine);
 JECS.addComponentsToEntity(engine, player, [new Position(0, 0), new Graphics("player1")]);
@@ -67,8 +67,9 @@ JECS.addComponentsToEntity(engine, player, [new Position(0, 0), new Graphics("pl
 const player2 = JECS.createEntity(engine);
 JECS.addComponentsToEntity(engine, player2, [new Position(0, 30), new Graphics("player2"), new Velocity(1, 0)]);
 
-// const state = {}
+// const state = {};
 // JECS.restoreEngine(engine,state);
+
 // document.addEventListener("click",()=>{
 //     console.log(JECS.serializeEngine(engine));
 // });
