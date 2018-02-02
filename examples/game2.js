@@ -1,4 +1,4 @@
-import * as JECS from "./src/jecs.js";
+import * as JECS from "../src/jecs.js";
 
 const Position = function(x, y) {
     this.x = x;
@@ -17,7 +17,7 @@ const Velocity = function(x, y) {
 const physicsSystem = function() {
     return {
         components: [Position, Velocity],
-        onUpdate: (position, velocity) => {
+        onUpdate: (entity, dt, position, velocity) => {
             position.x += velocity.x;
             position.y += velocity.y;
         },
@@ -27,13 +27,13 @@ const physicsSystem = function() {
 const renderSystem = function(renderer) {
     return {
         components: [Position, Graphics],
-        onAdded: (position, graphics) => {
+        onAdded: (entity, position, graphics) => {
             renderer.addNode(graphics.id);
         },
-        onUpdate: (position, graphics) => {
+        onUpdate: (entity, dt, position, graphics) => {
             renderer.positionNode(graphics.id, position.x, position.y);
         },
-        onRemoved: (position, graphics) => {
+        onRemoved: (entity, position, graphics) => {
             renderer.removeNode(graphics.id);
         },
     };
@@ -62,18 +62,20 @@ JECS.addSystemToEngine(engine, physicsSystem());
 JECS.addSystemToEngine(engine, renderSystem(domRender));
 
 const player = JECS.createEntity(engine);
-JECS.addComponentsToEntity(engine, player, [new Position(0, 0), new Graphics("player1")]);
+JECS.addComponentsToEntity(engine, player, [new Position(0, 0), new Graphics("player1"), new Velocity(2, 0)]);
 
 const player2 = JECS.createEntity(engine);
 JECS.addComponentsToEntity(engine, player2, [new Position(0, 30), new Graphics("player2"), new Velocity(1, 0)]);
 
-// const state = {};
+// const state = {
+//   }
 // JECS.restoreEngine(engine,state);
 
-// document.addEventListener("click",()=>{
-//     console.log(JECS.serializeEngine(engine));
-// });
+document.addEventListener("click",()=>{
+    console.log(JECS.serializeEngine(engine));
+});
 
+const dt = 1000 / 60;
 setInterval(() => {
-    JECS.tickAllSystems(engine);
-}, 100);
+    JECS.tickAllSystems(engine, dt);
+}, dt);

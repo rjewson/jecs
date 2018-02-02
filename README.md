@@ -1,1 +1,1 @@
-# jecs
+# JECS - Micro Entity Component system
